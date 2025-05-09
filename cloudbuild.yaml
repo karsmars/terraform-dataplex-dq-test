@@ -1,0 +1,12 @@
+steps:
+  - name: 'hashicorp/terraform:light'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        terraform init
+        terraform plan -out=tfplan
+        terraform apply -auto-approve tfplan
+
+options:
+  logging: CLOUD_LOGGING_ONLY
