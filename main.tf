@@ -101,12 +101,11 @@ resource "google_dataplex_datascan" "ui-scan-2" {
 resource "google_storage_bucket" "default" {
   name     = "spencer-tf-remote-backend"
   location = "US"
- 
+  project  = "ferrous-cipher-432403-j0" 
 
   force_destroy               = false
   public_access_prevention    = "enforced"
   uniform_bucket_level_access = true
- 
 
   versioning {
     enabled = true
