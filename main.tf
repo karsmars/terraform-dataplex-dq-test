@@ -113,21 +113,21 @@ resource "google_storage_bucket" "default" {
 }
 
 
-resource "local_file" "default" {
-  file_permission = "0644"
-  filename        = "${path.module}/backend.tf"
-
-  # You can store the template in a file and use the templatefile function for
-  # more modularity, if you prefer, instead of storing the template inline as
-  # we do here.
-  content = <<-EOT
-  terraform {
-    backend "gcs" {
-      bucket = "${google_storage_bucket.default.name}"
-    }
-  }
-  EOT
-}
+#resource "local_file" "default" {
+#  file_permission = "0644"
+#  filename        = "${path.module}/backend.tf"
+#
+#  # You can store the template in a file and use the templatefile function for
+#  # more modularity, if you prefer, instead of storing the template inline as
+#  # we do here.
+#  content = <<-EOT
+#  terraform {
+#    backend "gcs" {
+#      bucket = "${google_storage_bucket.default.name}"
+#    }
+#  }
+#  EOT
+#}
 
 resource "google_dataplex_datascan" "basic_quality" {
   location     = "us-central1"

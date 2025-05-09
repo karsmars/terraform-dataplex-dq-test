@@ -36,5 +36,5 @@ example: *tfplan*
 .terraformrc
 terraform.rc
 
-# Ignore backend.tf since this is created dynamically in main.tf when we run `terraform apply`
-backend.tf
+# # Ignore backend.tf since this is created dynamically in main.tf when we run `terraform apply`
+# backend.tf
