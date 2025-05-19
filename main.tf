@@ -11,7 +11,7 @@ resource "google_dataplex_datascan" "ui-scan-3" {
     }
 
     data_quality_spec {
-        row_filter       = "Weekly_Sales > 1500000"
+        row_filter       = "Weekly_Sales > 1300000"
         sampling_percent = 100
 
         rules {
