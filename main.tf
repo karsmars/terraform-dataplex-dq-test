@@ -79,7 +79,7 @@ resource "google_dataplex_datascan" "full_quality" {
 
         trigger {
             schedule {
-                cron = "TZ=America/Chicago 1 1 * * *"
+                cron = "TZ=America/Chicago 1 2 * * *"
             }
         }
     }
@@ -88,7 +88,7 @@ resource "google_dataplex_datascan" "full_quality" {
 # google_dataplex_datascan.imported_datascan:
 resource "google_dataplex_datascan" "imported_datascan" {
     data_scan_id     = "ui-scan-1"
-    description      = "The first scan created in the UI (adding comment here from code, to see whether cloud build check catches this)"
+    description      = "The first scan created in the UI (hoorah!)"
     display_name     = "ui-scan-1"
     labels           = {}
     location         = "us-central1"
