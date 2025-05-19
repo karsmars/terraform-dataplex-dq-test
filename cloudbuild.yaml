@@ -1,12 +1,25 @@
 steps:
   - name: 'hashicorp/terraform:light'
+    id: 'validate-format'
     entrypoint: sh
     args:
       - -c
       - |
+        echo "🧪 Initializing Terraform"
         terraform init
+
+        echo "🔍 Validating Terraform configuration"
         terraform validate
-        terraform fmt -check
+
+        echo "🧼 Checking Terraform formatting"
+        if ! terraform fmt -check -diff -recursive; then
+          echo ""
+          echo "❌ Terraform files are not properly formatted."
+          echo "💡 Run 'terraform fmt' locally and push the changes."
+          exit 1
+        else
+          echo "✅ Formatting looks good"
+        fi
 
   - name: 'hashicorp/terraform:light'
     id: 'plan-and-apply-on-main'
@@ -18,7 +31,7 @@ steps:
           terraform plan -out=tfplan
           terraform apply -auto-approve tfplan
         else
-          echo "Not on main, skipping plan/apply"
+          echo "🔁 Not on main branch — skipping plan/apply"
         fi
 
 options:
