@@ -1,12 +1,25 @@
 steps:
   - name: 'hashicorp/terraform:light'
-    entrypoint: 'sh'
+    entrypoint: sh
     args:
-      - '-c'
+      - -c
       - |
         terraform init
-        terraform plan -out=tfplan
-        terraform apply -auto-approve tfplan
+        terraform validate
+        terraform fmt -check
+
+  - name: 'hashicorp/terraform:light'
+    id: 'plan-and-apply-on-main'
+    entrypoint: sh
+    args:
+      - -c
+      - |
+        if [ "$BRANCH_NAME" = "main" ]; then
+          terraform plan -out=tfplan
+          terraform apply -auto-approve tfplan
+        else
+          echo "Not on main, skipping plan/apply"
+        fi
 
 options:
   logging: CLOUD_LOGGING_ONLY
