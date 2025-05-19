@@ -13,7 +13,7 @@ steps:
         terraform init
         terraform plan -no-color > plan.txt
 
-  - name: 'curlimages/curl'
+  - name: 'alpine'
     id: 'post-plan-to-github'
     entrypoint: sh
     env:
@@ -22,13 +22,18 @@ steps:
     args:
       - -c
       - |
-        apk add --no-cache jq
-        body=$(jq -Rs . < plan.txt)
-        curl -X POST \
-          -H "Authorization: token $$GITHUB_TOKEN" \
-          -H "Content-Type: application/json" \
-          -d "{\"body\":$body}" \
-          "https://api.github.com/repos/$REPO_NAME/issues/$_PR_NUMBER/comments"
+          apk add --no-cache curl jq
+          if [ -z "$_PR_NUMBER" ]; then
+            echo "❌ ERROR: Missing \$_PR_NUMBER"
+            exit 1
+          fi
+
+          body=$(jq -Rs . < plan.txt)
+          curl -X POST \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"body\":$body}" \
+            "https://api.github.com/repos/$REPO_NAME/issues/$_PR_NUMBER/comments"
 
   - name: 'hashicorp/terraform:light'
     id: 'terraform-detailed-exit'
