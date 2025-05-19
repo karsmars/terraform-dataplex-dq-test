@@ -1,6 +1,6 @@
 availableSecrets:
   secretManager:
-    - versionName: projects/ferrous-cipher-432403-j0/secrets/github-token-terraform-dataplex-pr-comment/versions/latest
+    - versionName: projects/$PROJECT_ID/secrets/github-token-terraform-dataplex-pr-comment/versions/latest
       env: GITHUB_TOKEN
 
 steps:
@@ -9,7 +9,6 @@ steps:
     env:
       - GITHUB_TOKEN
       - REPO_NAME=karsmars/terraform-dataplex-dq-test
-      - PULL_REQUEST_NUMBER=$PULL_REQUEST_NUMBER
     args:
       - -c
       - |
@@ -21,7 +20,7 @@ steps:
           -H "Authorization: token $GITHUB_TOKEN" \
           -H "Content-Type: application/json" \
           -d "{\"body\":$body}" \
-          "https://api.github.com/repos/$REPO_NAME/issues/$PULL_REQUEST_NUMBER/comments"
+          "https://api.github.com/repos/$REPO_NAME/issues/$_PR_NUMBER/comments"
 
         terraform plan -detailed-exitcode
         code=$?
