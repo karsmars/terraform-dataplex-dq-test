@@ -50,7 +50,7 @@ resource "google_dataplex_datascan" "full_quality" {
 
         rules {
             column      = "user_id"
-            description = "Rule description for user id rule bwahaha"
+            description = "Rule description for user id rule (this is from test-scripting git branch)"
             dimension   = "ACCURACY"
             ignore_null = false
             name        = "TEST-RULE-USER-ID"
