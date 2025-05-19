@@ -14,7 +14,7 @@ steps:
         echo "🧼 Checking Terraform formatting"
         if ! terraform fmt -check -diff -recursive; then
           echo ""
-          echo "❌ Terraform files are not properly formatted."
+          echo "❌ Terraform files are not properly formatted, but we still allow checks to pass"
           echo "💡 Run 'terraform fmt' locally and push the changes."
         else
           echo "✅ Formatting looks good"
