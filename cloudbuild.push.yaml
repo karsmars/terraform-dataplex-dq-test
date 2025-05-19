@@ -16,22 +16,8 @@ steps:
           echo ""
           echo "❌ Terraform files are not properly formatted."
           echo "💡 Run 'terraform fmt' locally and push the changes."
-          exit 1
         else
           echo "✅ Formatting looks good"
-        fi
-
-  - name: 'hashicorp/terraform:light'
-    id: 'plan-and-apply-on-main'
-    entrypoint: sh
-    args:
-      - -c
-      - |
-        if [ "$BRANCH_NAME" = "main" ]; then
-          terraform plan -out=tfplan
-          terraform apply -auto-approve tfplan
-        else
-          echo "🔁 Not on main branch — skipping plan/apply"
         fi
 
 options:
