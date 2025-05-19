@@ -5,6 +5,16 @@ availableSecrets:
 
 steps:
   - name: 'hashicorp/terraform:light'
+    id: 'terraform-init-and-plan'
+    entrypoint: sh
+    args:
+      - -c
+      - |
+        terraform init
+        terraform plan -no-color > plan.txt
+
+  - name: 'curlimages/curl'
+    id: 'post-plan-to-github'
     entrypoint: sh
     env:
       - REPO_NAME=karsmars/terraform-dataplex-dq-test
@@ -12,16 +22,20 @@ steps:
     args:
       - -c
       - |
-        terraform init
-
-        terraform plan -no-color > plan.txt
+        apk add --no-cache jq
         body=$(jq -Rs . < plan.txt)
         curl -X POST \
-          -H "Authorization: token $$GITHUB_TOKEN" \
+          -H "Authorization: token $GITHUB_TOKEN" \
           -H "Content-Type: application/json" \
           -d "{\"body\":$body}" \
           "https://api.github.com/repos/$REPO_NAME/issues/$_PR_NUMBER/comments"
 
+  - name: 'hashicorp/terraform:light'
+    id: 'terraform-detailed-exit'
+    entrypoint: sh
+    args:
+      - -c
+      - |
         terraform plan -detailed-exitcode
         code=$?
         if [ $code -eq 1 ]; then
