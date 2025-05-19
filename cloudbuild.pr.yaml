@@ -8,7 +8,7 @@ steps:
     entrypoint: sh
     env:
       - REPO_NAME=karsmars/terraform-dataplex-dq-test
-    # secretEnv: ['GITHUB_TOKEN']
+    secretEnv: ['GITHUB_TOKEN']
     args:
       - -c
       - |
