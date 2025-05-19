@@ -7,7 +7,6 @@ steps:
   - name: 'hashicorp/terraform:light'
     entrypoint: sh
     env:
-      - GITHUB_TOKEN
       - REPO_NAME=karsmars/terraform-dataplex-dq-test
     args:
       - -c
