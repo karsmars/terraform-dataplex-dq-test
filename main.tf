@@ -1,6 +1,6 @@
 # google_dataplex_datascan.basic_quality:
 resource "google_dataplex_datascan" "basic_quality" {
-    data_scan_id     = "tf-dataquality-basic"
+  data_scan_id     = "tf-dataquality-basic"
     labels           = {}
     location         = "us-central1"
     project          = "ferrous-cipher-432403-j0"
@@ -88,7 +88,7 @@ resource "google_dataplex_datascan" "full_quality" {
 # google_dataplex_datascan.imported_datascan:
 resource "google_dataplex_datascan" "imported_datascan" {
     data_scan_id     = "ui-scan-1"
-    description      = "The first scan created in the UI"
+    description      = "The first scan created in the UI (adding comment here from code, to see whether cloud build check catches this)"
     display_name     = "ui-scan-1"
     labels           = {}
     location         = "us-central1"
