@@ -29,6 +29,9 @@ steps:
           fi
 
           body=$(jq -Rs . < plan.txt)
+
+          echo "Posting to https://api.github.com/repos/$REPO_NAME/issues/$_PR_NUMBER/comments"
+
           curl -X POST \
             -H "Authorization: token $$GITHUB_TOKEN" \
             -H "Content-Type: application/json" \
