@@ -254,34 +254,22 @@ resource "google_dataplex_datascan" "ui-scan-3" {
 # google_storage_bucket.default:
 resource "google_storage_bucket" "default" {
     default_event_based_hold    = false
-    effective_labels            = {
-        "goog-terraform-provisioned" = "true"
-    }
     enable_object_retention     = false
     force_destroy               = false
-    id                          = "spencer-tf-remote-backend"
     labels                      = {}
     location                    = "US"
     name                        = "spencer-tf-remote-backend"
     project                     = "ferrous-cipher-432403-j0"
-    project_number              = 44312878874
     public_access_prevention    = "enforced"
     requester_pays              = false
     rpo                         = "DEFAULT"
     storage_class               = "STANDARD"
-    terraform_labels            = {
-        "goog-terraform-provisioned" = "true"
-    }
     uniform_bucket_level_access = true
 
     hierarchical_namespace {
         enabled = false
     }
 
-    soft_delete_policy {
-        effective_time             = "2025-03-25T20:29:15.579Z"
-        retention_duration_seconds = 604800
-    }
 
     versioning {
         enabled = true
