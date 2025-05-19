@@ -1,0 +1,24 @@
+steps:
+  - name: 'hashicorp/terraform:light'
+    id: 'validate-format'
+    entrypoint: sh
+    args:
+      - -c
+      - |
+        echo "🧪 Initializing Terraform"
+        terraform init
+
+        echo "🔍 Validating Terraform configuration"
+        terraform validate
+
+        echo "🧼 Checking Terraform formatting"
+        if ! terraform fmt -check -diff -recursive; then
+          echo ""
+          echo "❌ Terraform files are not properly formatted."
+          echo "💡 Run 'terraform fmt' locally and push the changes."
+        else
+          echo "✅ Formatting looks good"
+        fi
+
+options:
+  logging: CLOUD_LOGGING_ONLY

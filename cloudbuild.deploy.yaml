@@ -1,0 +1,27 @@
+steps:
+  - name: 'hashicorp/terraform:light'
+    id: 'plan-and-apply-on-main'
+    entrypoint: sh
+    args:
+      - -c
+      - |
+        
+
+        if [ "$BRANCH_NAME" = "main" ]; then
+          echo "🧪 Initializing Terraform"
+          terraform init
+
+          echo "🔍 Validating Terraform configuration"
+          terraform validate
+
+          echo "Planning Terraform changes"
+          terraform plan -out=tfplan
+
+          echo "Applying Terraform changes"
+          terraform apply -auto-approve tfplan
+        else
+          echo "🔁 Not on main branch - skipping checks"
+        fi
+
+options:
+  logging: CLOUD_LOGGING_ONLY
