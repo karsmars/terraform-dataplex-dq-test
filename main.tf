@@ -10,7 +10,8 @@ resource "google_dataplex_datascan" "basic_quality" {
     }
 
     data_quality_spec {
-        sampling_percent = 0
+        row_filter       = "Weekly_Sales > 1300000"
+        sampling_percent = 100
 
         rules {
             description = "rule 1 for validity dimension"
