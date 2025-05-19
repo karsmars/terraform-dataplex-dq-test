@@ -1,13 +1,13 @@
 availableSecrets:
   secretManager:
-    - versionName: projects/$PROJECT_ID/secrets/github-token-terraform-dataplex-pr-comment/versions/latest
+    - versionName: projects/ferrous-cipher-432403-j0/secrets/github-token-terraform-dataplex-pr-comment/versions/latest
       env: GITHUB_TOKEN
 
 steps:
   - name: 'hashicorp/terraform:light'
     entrypoint: sh
     env:
-      - GITHUB_TOKEN=$(GITHUB_TOKEN)
+      - GITHUB_TOKEN
       - REPO_NAME=karsmars/terraform-dataplex-dq-test
     args:
       - -c
