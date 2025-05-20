@@ -1,7 +1,7 @@
 availableSecrets:
   secretManager:
     - versionName: projects/ferrous-cipher-432403-j0/secrets/github-token-terraform-dataplex-pr-comment/versions/latest
-      env: 'MY_GITHUB_TOKEN'
+      env: 'GITHUB_TOKEN'
 
 steps:
   - name: 'hashicorp/terraform:light'
@@ -18,7 +18,7 @@ steps:
     entrypoint: sh
     env:
       - REPO_NAME=karsmars/terraform-dataplex-dq-test
-    secretEnv: ['MY_GITHUB_TOKEN']
+    secretEnv: ['GITHUB_TOKEN']
     args:
       - -c
       - |
@@ -37,7 +37,7 @@ steps:
           echo "GITHUB_TOKEN: ${GITHUB_TOKEN:0:15}..."
 
           curl -X POST \
-            -H "Authorization: token $MY_GITHUB_TOKEN" \
+            -H "Authorization: token $$GITHUB_TOKEN" \
             -H "Content-Type: application/json" \
             -d "{\"body\":$body}" \
             "https://api.github.com/repos/$REPO_NAME/issues/$_PR_NUMBER/comments"
