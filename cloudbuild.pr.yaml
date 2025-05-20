@@ -37,7 +37,7 @@ steps:
           echo "GITHUB_TOKEN: ${GITHUB_TOKEN:0:15}..."
 
           curl -X POST \
-            -H "Authorization: token ${GITHUB_TOKEN}" \
+            -H "Authorization: token $GITHUB_TOKEN" \
             -H "Content-Type: application/json" \
             -d "{\"body\":$body}" \
             "https://api.github.com/repos/$REPO_NAME/issues/$_PR_NUMBER/comments"
