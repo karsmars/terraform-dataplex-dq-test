@@ -1,28 +1,44 @@
 availableSecrets:
   secretManager:
     - versionName: projects/ferrous-cipher-432403-j0/secrets/github-token-terraform-dataplex-pr-comment/versions/latest
-      env: GITHUB_TOKEN
+      env: 'GITHUB_TOKEN'
 
 steps:
   - name: 'hashicorp/terraform:light'
+    id: 'terraform-init-and-plan'
     entrypoint: sh
-    env:
-      - GITHUB_TOKEN
-      - REPO_NAME=karsmars/terraform-dataplex-dq-test
-      - PULL_REQUEST_NUMBER=$PULL_REQUEST_NUMBER
     args:
       - -c
       - |
         terraform init
-
         terraform plan -no-color > plan.txt
-        body=$(jq -Rs . < plan.txt)
-        curl -X POST \
-          -H "Authorization: token $GITHUB_TOKEN" \
-          -H "Content-Type: application/json" \
-          -d "{\"body\":$body}" \
-          "https://api.github.com/repos/$REPO_NAME/issues/$PULL_REQUEST_NUMBER/comments"
 
+  - name: 'alpine'
+    id: 'post-plan-to-github'
+    entrypoint: sh
+    secretEnv: ['GITHUB_TOKEN']
+    args:
+      - -c
+      - |
+          apk add --no-cache curl jq
+          if [ -z "$_PR_NUMBER" ]; then
+            echo "❌ ERROR: Missing \$_PR_NUMBER"
+            exit 1
+          fi
+
+          body=$(jq -Rs . < plan.txt)
+          curl -X POST \
+            -H "Authorization: token $$GITHUB_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"body\":$body}" \
+            "https://api.github.com/repos/$REPO_FULL_NAME/issues/$_PR_NUMBER/comments"
+
+  - name: 'hashicorp/terraform:light'
+    id: 'terraform-detailed-exit'
+    entrypoint: sh
+    args:
+      - -c
+      - |
         terraform plan -detailed-exitcode
         code=$?
         if [ $code -eq 1 ]; then
