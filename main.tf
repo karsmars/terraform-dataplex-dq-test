@@ -99,7 +99,7 @@ resource "google_dataplex_datascan" "imported_datascan" {
     }
 
     data_quality_spec {
-        row_filter       = "Date > date('2011-01-01')"
+        row_filter       = "Date > date('2012-01-01')"
         sampling_percent = 100
 
         post_scan_actions {
