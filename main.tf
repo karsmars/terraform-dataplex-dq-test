@@ -79,7 +79,7 @@ resource "google_dataplex_datascan" "full_quality" {
 
         trigger {
             schedule {
-                cron = "TZ=America/Chicago 1 4 * * *"
+                cron = "TZ=America/Chicago 1 5 * * *"
             }
         }
     }
