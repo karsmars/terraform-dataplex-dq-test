@@ -13,12 +13,12 @@ labels           = {}
   
   data_quality_spec {
     row_filter       = null
-    sampling_percent = 100
+    sampling_percent = 90
     
     rules {
       column      = "Temperature"
       description = null
-      dimension   = "COMPLETENESS"
+      dimension   = "VALIDITY"
       ignore_null = false
       name        = null
       threshold   = 1
@@ -38,7 +38,7 @@ labels           = {}
 
 resource "google_dataplex_datascan" "ui-scan-1" {
   data_scan_id     = "ui-scan-1"
-  description      = "The first scan created in the UI (hoorah!)"
+  description      = "The first scan created in the UI (hoorah!) test comment"
   display_name     = "ui-scan-1"
   location         = "us-central1"
   project          = "ferrous-cipher-432403-j0"
