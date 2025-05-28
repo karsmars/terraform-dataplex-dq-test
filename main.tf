@@ -1,14 +1,3 @@
-# google_dataplex_datascan.basic_quality:
-
-# google_dataplex_datascan.full_quality:
-
-# google_dataplex_datascan.imported_datascan:
-
-# google_dataplex_datascan.ui-scan-2:
-
-# google_dataplex_datascan.ui-scan-3:
-
-# google_storage_bucket.default:
 resource "google_storage_bucket" "default" {
     default_event_based_hold    = false
     enable_object_retention     = false
@@ -35,6 +24,10 @@ resource "google_storage_bucket" "default" {
 
 module "dataplex_test" {
   source = "./modules/dataplex_test"
+}
+
+module "dev_47c30c8a" {
+  source = "./modules/dev_47c30c8a"
 }
 
 module "samples" {

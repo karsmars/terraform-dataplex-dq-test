@@ -1,11 +1,12 @@
-resource "google_dataplex_datascan" "full_quality" {
+resource "google_dataplex_datascan" "tf-advanced-scan" {
   data_scan_id     = "tf-advanced-scan"
   description      = "Testing resource - testing SQL assertions, my own datasources, and scheduling"
-labels           = {}
+  display_name     = null
   location         = "us-central1"
   project          = "ferrous-cipher-432403-j0"
   
   data {
+    entity   = null
     resource = "//bigquery.googleapis.com/projects/ferrous-cipher-432403-j0/datasets/thelook/tables/orders"
   }
   
@@ -49,3 +50,4 @@ labels           = {}
     }
   }
 }
+
