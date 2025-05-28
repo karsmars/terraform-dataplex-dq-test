@@ -1,12 +1,50 @@
-resource "google_dataplex_datascan" "ui-scan-1" {
-  data_scan_id     = "ui-scan-1"
-  description      = "The first scan created in the UI (hoorah!)"
-  display_name     = "ui-scan-1"
+resource "google_dataplex_datascan" "ui-scan-4" {
+  data_scan_id     = "ui-scan-4"
+  description      = "Made this in UI"
+  display_name     = "ui-scan-4"
 labels           = {}
   location         = "us-central1"
   project          = "ferrous-cipher-432403-j0"
   
   data {
+    entity   = null
+    resource = "//bigquery.googleapis.com/projects/ferrous-cipher-432403-j0/datasets/dataplex_test/tables/walmart_sales"
+  }
+  
+  data_quality_spec {
+    row_filter       = null
+    sampling_percent = 100
+    
+    rules {
+      column      = "Temperature"
+      description = null
+      dimension   = "COMPLETENESS"
+      ignore_null = false
+      name        = null
+      threshold   = 1
+      
+    non_null_expectation {}
+    }
+  }
+  
+  execution_spec {
+    field = null
+    
+    trigger {
+    on_demand {}
+    }
+  }
+}
+
+resource "google_dataplex_datascan" "ui-scan-1" {
+  data_scan_id     = "ui-scan-1"
+  description      = "The first scan created in the UI (hoorah!)"
+  display_name     = "ui-scan-1"
+  location         = "us-central1"
+  project          = "ferrous-cipher-432403-j0"
+  
+  data {
+    entity   = null
     resource = "//bigquery.googleapis.com/projects/ferrous-cipher-432403-j0/datasets/dataplex_test/tables/walmart_sales"
   }
   
@@ -67,6 +105,8 @@ labels           = {}
   }
   
   execution_spec {
+    field = null
+    
     trigger {
     on_demand {}
     }
@@ -82,10 +122,12 @@ labels           = {}
   project          = "ferrous-cipher-432403-j0"
   
   data {
+    entity   = null
     resource = "//bigquery.googleapis.com/projects/ferrous-cipher-432403-j0/datasets/dataplex_test/tables/walmart_sales"
   }
   
   data_quality_spec {
+    row_filter       = null
     sampling_percent = 100
     
     post_scan_actions {
@@ -113,6 +155,8 @@ labels           = {}
   }
   
   execution_spec {
+    field = null
+    
     trigger {
     on_demand {}
     }
@@ -128,6 +172,7 @@ labels           = {}
   project          = "ferrous-cipher-432403-j0"
   
   data {
+    entity   = null
     resource = "//bigquery.googleapis.com/projects/ferrous-cipher-432403-j0/datasets/dataplex_test/tables/walmart_sales"
   }
   
@@ -155,8 +200,11 @@ labels           = {}
   }
   
   execution_spec {
+    field = null
+    
     trigger {
     on_demand {}
     }
   }
 }
+
