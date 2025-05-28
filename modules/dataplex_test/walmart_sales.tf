@@ -1,4 +1,4 @@
-resource "google_dataplex_datascan" "imported_datascan" {
+resource "google_dataplex_datascan" "ui-scan-1" {
   data_scan_id     = "ui-scan-1"
   description      = "The first scan created in the UI (hoorah!)"
   display_name     = "ui-scan-1"

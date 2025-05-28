@@ -1,4 +1,4 @@
-resource "google_dataplex_datascan" "full_quality" {
+resource "google_dataplex_datascan" "tf-advanced-scan" {
   data_scan_id     = "tf-advanced-scan"
   description      = "Testing resource - testing SQL assertions, my own datasources, and scheduling"
 labels           = {}

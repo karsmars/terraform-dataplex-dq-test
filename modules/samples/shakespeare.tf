@@ -1,4 +1,4 @@
-resource "google_dataplex_datascan" "basic_quality" {
+resource "google_dataplex_datascan" "tf-dataquality-basic" {
   data_scan_id     = "tf-dataquality-basic"
 labels           = {}
   location         = "us-central1"
