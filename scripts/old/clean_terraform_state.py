@@ -69,7 +69,6 @@ def clean_lines(lines):
     current_resource = None
     nesting = 0
     inside_block_to_remove = False
-    skip_block_nesting = 0
 
     for line in lines:
         # Detect entry into a dataplex scan resource

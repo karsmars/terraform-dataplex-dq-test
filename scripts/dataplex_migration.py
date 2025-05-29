@@ -15,10 +15,9 @@ TF_FILE = f"{START_TIME}_imported_scans.tf"
 IMPORT_SCRIPT = f"{START_TIME}_import_commands.sh"
 MOVED_SCANS_FILE =  f"{START_TIME}_moved_scans.json"
 RAW_STATE_FILE = f"{START_TIME}_full_imported_config.tf"
-CLEANED_FILE = "main.tf"
+MAIN_FILE = "main.tf"
 MODULES_DIR = "modules"
 
-# TODO : add google storage bucket
 
 RESOURCE_TYPES = {
     "google_dataplex_datascan": {
@@ -86,16 +85,8 @@ def get_existing_state_resources():
     return resources
 
 
-def get_existing_config_resources():
-    if not os.path.exists(CLEANED_FILE):
-        return set()
-    with open(CLEANED_FILE, "r") as f:
-        config = f.read()
-    return set(re.findall(r'resource\s+\"google_dataplex_datascan\"\s+\"(.*?)\"', config))
-
 def generate_import_files(scans):
     existing_state = get_existing_state_resources()
-    existing_config = get_existing_config_resources()
 
     sanitized_scans = []
     sanitized_scan_ids = set()
@@ -139,43 +130,8 @@ def generate_import_files(scans):
     print(f"✅ Terraform state sync complete. {skipped} skipped, {added} imports written, {removed} removals written to `{IMPORT_SCRIPT}`.")
     input("📥 Press Enter to continue with import/removal of terraform state...")
 
-# def generate_import_files(scans):
-#     existing_state = get_existing_state_resources()
-#     existing_config = get_existing_config_resources()
-
-#     added = 0
-#     skipped = 0
-
-#     with open(TF_FILE, "w") as tf_out, open(IMPORT_SCRIPT, "w") as sh_out:
-#         for scan in scans:
-#             scan_id = scan["name"].split("/")[-1]
-#             resource_name = sanitize(scan_id)
-
-#             if resource_name in existing_state: # or resource_name in existing_config:
-#                 print(f"⚠️ Skipping existing scan: {resource_name}")
-#                 skipped += 1
-#                 continue
-
-#             print(f"Adding new scan: {resource_name}")
-#             tf_out.write(f'resource "google_dataplex_datascan" "{resource_name}" {{\n  # configuration will be populated after import\n}}\n\n')
-#             full_id = f"projects/{PROJECT_ID}/locations/{LOCATION}/dataScans/{scan_id}"
-#             sh_out.write(f'terraform import google_dataplex_datascan.{resource_name} "{full_id}"\n')
-#             added += 1
-
-#     print(f"✅ Import files generated. {added} added, {skipped} skipped.")
-#     input("📥 Press Enter to continue with import...")
-
 
 # ---------- STEP 3: RUN IMPORTS ----------
-# def remove_stub_from_file(resource_name):
-#     with open(TF_FILE, "r") as f:
-#         content = f.read()
-
-#     pattern = rf'resource "google_dataplex_datascan" "{re.escape(resource_name)}" \{{\n.*?# configuration will be populated after import\n\}}\n\n'
-#     content_new = re.sub(pattern, '', content, flags=re.DOTALL)
-
-#     with open(TF_FILE, "w") as f:
-#         f.write(content_new)
 
 def run_imports():
     with open(IMPORT_SCRIPT, "r") as script_file:
@@ -188,11 +144,6 @@ def run_imports():
             if result.returncode != 0:
                 print(f"⚠️ Import failed, skipping: {line}")
                 continue
-
-            # match = re.match(r'terraform import google_dataplex_datascan\.([^\s]+)', line)
-            # if match:
-            #     resource_name = match.group(1)
-            #     remove_stub_from_file(resource_name)
     
     # Delete the import script and import TF after cleaning
     os.remove(IMPORT_SCRIPT)  
@@ -209,7 +160,7 @@ def run_imports():
     input("🧹 Press Enter to clean Terraform file...")
 
 
-# ---------- STEP 4: CLEAN STATE FILE ----------
+# ---------- STEP 4: TRANSFORM STATE FILE INTO CONFIG ----------
 def is_resource_start(line, resource_type):
     pattern = rf'^\s*resource\s+"{re.escape(resource_type)}"\s+"[^"]+"\s*{{'
     return re.match(pattern, line)
@@ -245,7 +196,7 @@ def clean_lines(lines):
     inside_block_to_remove = False
 
     for line in lines:
-        # ✅ Skip comments
+        # Skip comments in TF config
         if line.strip().startswith("#"):
             continue
 
@@ -299,19 +250,15 @@ def clean_state_file():
 
     cleaned = clean_lines(lines)
 
-    with open(CLEANED_FILE, "w") as f:
+    with open(MAIN_FILE, "w") as f:
         f.writelines(cleaned)
 
     os.remove(RAW_STATE_FILE)  # Delete the raw state file after cleaning
-    print(f"🧼 Cleaned config saved to `{CLEANED_FILE}` and deleted `{RAW_STATE_FILE}`.")
+    print(f"🧼 Cleaned config saved to `{MAIN_FILE}` and deleted `{RAW_STATE_FILE}`.")
     input("📁 Press Enter to modularize scans by table...")
 
 
 # ---------- STEP 5: SPLIT BY SCHEMA/TABLE ----------
-# RESOURCE_BLOCK_RE = re.compile(
-#     r'(resource\s+"google_dataplex_datascan"\s+"[^"]+"\s*\{(?:[^{}]*|\{[^{}]*\})*\})',
-#     re.DOTALL
-# )
 
 # useful for getting schema and table from data resource url
 DATA_RESOURCE_RE = re.compile(
@@ -412,7 +359,7 @@ def reset_modules_dir():
 
 
 def modularize_scans():
-    with open(CLEANED_FILE, "r") as f:
+    with open(MAIN_FILE, "r") as f:
         lines = f.readlines()
         original_content = "".join(lines)
 
@@ -458,9 +405,9 @@ def modularize_scans():
     # Remove MOVED_SCANS_FILE
     os.remove(MOVED_SCANS_FILE)
 
-    with open(CLEANED_FILE, "w") as f:
+    with open(MAIN_FILE, "w") as f:
         f.write(updated_main)
-    print(f"✅ Modularization complete. Check `modules/` and updated `{CLEANED_FILE}`.")
+    print(f"✅ Modularization complete. Check `modules/` and updated `{MAIN_FILE}`.")
 
 
 # ---------- MAIN ----------

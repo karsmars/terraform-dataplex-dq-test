@@ -6,11 +6,11 @@ from collections import defaultdict
 INPUT_FILE = "main.tf"
 MODULES_DIR = "modules"
 
-# Match full google_dataplex_datascan resource blocks
-RESOURCE_BLOCK_RE = re.compile(
-    r'(resource\s+"google_dataplex_datascan"\s+"[^"]+"\s*\{(?:[^{}]*|\{[^{}]*\})*\})',
-    re.DOTALL
-)
+# # Match full google_dataplex_datascan resource blocks
+# RESOURCE_BLOCK_RE = re.compile(
+#     r'(resource\s+"google_dataplex_datascan"\s+"[^"]+"\s*\{(?:[^{}]*|\{[^{}]*\})*\})',
+#     re.DOTALL
+# )
 
 # Extract schema and table from the data.resource field
 DATA_RESOURCE_RE = re.compile(
