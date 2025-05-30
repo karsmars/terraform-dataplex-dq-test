@@ -32,7 +32,7 @@ labels           = {}
       sql_assertion {
         sql_statement = <<-EOT
         SELECT Store
-        FROM ferrous-cipher-432403-j0.dataplex_test.walmart_sales
+      FROM $${data()}
         WHERE Store < 0
         EOT
       }
