@@ -150,6 +150,10 @@ def run_imports():
     os.remove(TF_FILE)
     print(f"Deleted`{IMPORT_SCRIPT}` and `{TF_FILE}`.")
 
+    # Run Terraform refresh to see if there are changes in any other scans
+    print("Refreshing Terraform state..")
+    subprocess.run("terraform refresh", shell=True, capture_output=True, text=True)
+
     # Only call terraform show once, after all imports
     print("📄 Running final terraform show to capture full state...")
     result = subprocess.run("terraform show -no-color", shell=True, capture_output=True, text=True)
@@ -189,6 +193,13 @@ def count_braces(line):
     return open_count, close_count
 
 
+# Used for the ${data()} construction in Dataplex SQL assertion rules: https://cloud.google.com/dataplex/docs/auto-data-quality-overview#data-reference-parameter
+# If we put ${data()} into Terraform config, it thinks this is a variable it should look for. We want to escape it so Terraform ignores it, but Dataplex can read it
+def escape_data_reference_parameter(text):
+    # Replace ' ${data()}' with ' $${data()}'
+    return re.sub(r'\s\${data\(\)}', r' $${data()}', text)
+
+
 def clean_lines(lines):
     output = []
     current_resource = None
@@ -199,6 +210,8 @@ def clean_lines(lines):
         # Skip comments in TF config
         if line.strip().startswith("#"):
             continue
+
+        line = escape_data_reference_parameter(line)
 
         # Detect entry into a dataplex scan resource
         if current_resource is None:
@@ -242,6 +255,7 @@ def clean_lines(lines):
         output.append(line)
         continue
     return output
+
 
 
 def clean_state_file():

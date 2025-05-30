@@ -2,6 +2,7 @@ resource "google_dataplex_datascan" "tf-advanced-scan" {
   data_scan_id     = "tf-advanced-scan"
   description      = "Testing resource - testing SQL assertions, my own datasources, and scheduling"
   display_name     = null
+labels           = {}
   location         = "us-central1"
   project          = "ferrous-cipher-432403-j0"
   
