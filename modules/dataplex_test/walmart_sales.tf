@@ -48,7 +48,7 @@ labels           = {}
       sql_assertion {
         sql_statement = <<-EOT
         SELECT Unemployment
-      FROM ${data()}
+      FROM $${data()}
         WHERE Unemployment > 10
         EOT
       }
