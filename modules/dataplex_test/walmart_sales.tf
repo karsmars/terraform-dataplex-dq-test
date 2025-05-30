@@ -1,45 +1,8 @@
-resource "google_dataplex_datascan" "ui-scan-4" {
-  data_scan_id     = "ui-scan-4"
-  description      = "Made this in UI"
-  display_name     = "ui-scan-4"
-labels           = {}
-  location         = "us-central1"
-  project          = "ferrous-cipher-432403-j0"
-  
-  data {
-    entity   = null
-    resource = "//bigquery.googleapis.com/projects/ferrous-cipher-432403-j0/datasets/dataplex_test/tables/walmart_sales"
-  }
-  
-  data_quality_spec {
-    row_filter       = null
-    sampling_percent = 90
-    
-    rules {
-      column      = "Temperature"
-      description = null
-      dimension   = "VALIDITY"
-      ignore_null = false
-      name        = null
-      threshold   = 1
-      
-    non_null_expectation {}
-    }
-  }
-  
-  execution_spec {
-    field = null
-    
-    trigger {
-    on_demand {}
-    }
-  }
-}
-
 resource "google_dataplex_datascan" "ui-scan-1" {
   data_scan_id     = "ui-scan-1"
   description      = "The first scan created in the UI (hoorah!) test comment"
   display_name     = "ui-scan-1"
+labels           = {}
   location         = "us-central1"
   project          = "ferrous-cipher-432403-j0"
   
@@ -85,8 +48,8 @@ resource "google_dataplex_datascan" "ui-scan-1" {
       sql_assertion {
         sql_statement = <<-EOT
         SELECT Unemployment
-        FROM ferrous-cipher-432403-j0.dataplex_test.walmart_sales
-        WHERE Unemployment > 20
+      FROM ${data()}
+        WHERE Unemployment > 10
         EOT
       }
     }
@@ -196,6 +159,44 @@ labels           = {}
         HAVING ct > 0
         EOT
       }
+    }
+  }
+  
+  execution_spec {
+    field = null
+    
+    trigger {
+    on_demand {}
+    }
+  }
+}
+
+resource "google_dataplex_datascan" "ui-scan-4" {
+  data_scan_id     = "ui-scan-4"
+  description      = "Made this in UI"
+  display_name     = "ui-scan-4"
+labels           = {}
+  location         = "us-central1"
+  project          = "ferrous-cipher-432403-j0"
+  
+  data {
+    entity   = null
+    resource = "//bigquery.googleapis.com/projects/ferrous-cipher-432403-j0/datasets/dataplex_test/tables/walmart_sales"
+  }
+  
+  data_quality_spec {
+    row_filter       = null
+    sampling_percent = 90
+    
+    rules {
+      column      = "Temperature"
+      description = null
+      dimension   = "VALIDITY"
+      ignore_null = false
+      name        = null
+      threshold   = 1
+      
+    non_null_expectation {}
     }
   }
   
