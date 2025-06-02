@@ -216,6 +216,10 @@ def escape_data_reference_parameter(text):
     return re.sub(r'\s\${data\(\)}', r' $${data()}', text)
 
 
+def replace_project_reference(text):
+    return text.replace(IMPORT_PROJECT_ID, EXPORT_PROJECT_ID)
+
+
 def clean_lines(lines):
     output = []
     current_resource = None
@@ -226,8 +230,10 @@ def clean_lines(lines):
         # Skip comments in TF config
         if line.strip().startswith("#"):
             continue
-
+        
+        # Properly escape character, and replace import project name with export project name
         line = escape_data_reference_parameter(line)
+        line = replace_project_reference(line)
 
         # Detect entry into a dataplex scan resource
         if current_resource is None:
