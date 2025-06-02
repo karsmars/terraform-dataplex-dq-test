@@ -63,13 +63,9 @@ def check_gcloud_auth():
 
 def initialize_dev_terraform():
     print("Initializing Terraform dev instance locally...")
-
-    result = subprocess.run(["pwd"], capture_output=True, text=True, check=True)
-    print("PWD:", result)
     
     result = subprocess.run(["terraform", "init", "-backend-config=backend-dev.tfbackend", "-reconfigure"], capture_output=True, text=True, check=True)
     
-    print("Terraform init result:", result)
     # if not accounts:
     #     raise RuntimeError("🚫 Terraform init failed.")
     print(f"✅ Terraform init succeeded.")
