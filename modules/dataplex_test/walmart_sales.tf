@@ -12,7 +12,7 @@ labels           = {}
   }
   
   data_quality_spec {
-    row_filter       = "Date > date('2012-01-01')"
+    row_filter       = "Date > date('2013-01-01')"
     sampling_percent = 100
     
     post_scan_actions {
@@ -23,7 +23,7 @@ labels           = {}
     
     rules {
       column      = "Store"
-      description = "Store nbr should not be negative"
+      description = "Store nbr should not be positive"
       dimension   = "ACCURACY"
       ignore_null = false
       name        = "rule-1-store"
@@ -33,7 +33,7 @@ labels           = {}
         sql_statement = <<-EOT
         SELECT Store
       FROM $${data()}
-        WHERE Store < 0
+        WHERE Store > 0
         EOT
       }
     }
