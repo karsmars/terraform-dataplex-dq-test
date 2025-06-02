@@ -13,8 +13,6 @@ steps:
         cd dataplex_infra
         pwd
         terraform init -backend-config=backend-prod.tfbackend
-        terraform show
-        terraform plan
         terraform plan -no-color > plan.txt
         ls
 
@@ -25,6 +23,7 @@ steps:
     args:
       - -c
       - |
+          cd dataplex_infra
           pwd
           apk add --no-cache curl jq
           if [ -z "$_PR_NUMBER" ]; then
@@ -45,6 +44,7 @@ steps:
     args:
       - -c
       - |
+        cd dataplex_infra
         pwd
         terraform plan -detailed-exitcode
         code=$?
