@@ -17,7 +17,7 @@ labels           = {}
     
     rules {
       column      = "Store"
-      description = "Store number should not be negative"
+      description = "Store number should not be positive"
       dimension   = "ACCURACY"
       ignore_null = false
       name        = "store-rule"
@@ -27,7 +27,7 @@ labels           = {}
         sql_statement = <<-EOT
         SELECT Store
       FROM $${data()}
-        WHERE Store < 0
+        WHERE Store > 0
         EOT
       }
     }

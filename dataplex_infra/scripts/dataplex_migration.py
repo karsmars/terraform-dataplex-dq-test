@@ -51,6 +51,13 @@ RESOURCE_TYPES = {
 }
 
 # ---------- STEP 1: GCLOUD AUTH / TERRAFORM INIT ----------
+def move_to_correct_directory():
+    script_dir = Path(__file__).resolve().parent.parent
+    os.chdir(script_dir)
+
+    print("Changed working directory to script location (should be dataplex_infra, otherwise abort): ", Path.cwd())
+
+
 def check_gcloud_auth():
     print("🔐 Checking gcloud auth...")
     result = subprocess.run(["gcloud", "auth", "list", "--format=json"], capture_output=True, text=True, check=True)
@@ -63,17 +70,17 @@ def check_gcloud_auth():
 
 def initialize_dev_terraform():
     print("Initializing Terraform dev instance locally...")
-
-    result = subprocess.run(["pwd"], capture_output=True, text=True, check=True)
-    print("PWD:", result)
     
     result = subprocess.run(["terraform", "init", "-backend-config=backend-dev.tfbackend", "-reconfigure"], capture_output=True, text=True, check=True)
     
-    print("Terraform init result:", result)
     # if not accounts:
     #     raise RuntimeError("🚫 Terraform init failed.")
     print(f"✅ Terraform init succeeded.")
     input("🔎 Press Enter to continue...")
+
+
+def initializations():
+    move_to_correct_directory()
 
 
 # ---------- STEP 2: GENERATE IMPORT FILES ----------
@@ -216,6 +223,10 @@ def escape_data_reference_parameter(text):
     return re.sub(r'\s\${data\(\)}', r' $${data()}', text)
 
 
+def replace_project_reference(text):
+    return text.replace(IMPORT_PROJECT_ID, EXPORT_PROJECT_ID)
+
+
 def clean_lines(lines):
     output = []
     current_resource = None
@@ -226,8 +237,10 @@ def clean_lines(lines):
         # Skip comments in TF config
         if line.strip().startswith("#"):
             continue
-
+        
+        # Properly escape character, and replace import project name with export project name
         line = escape_data_reference_parameter(line)
+        line = replace_project_reference(line)
 
         # Detect entry into a dataplex scan resource
         if current_resource is None:
@@ -442,6 +455,7 @@ def modularize_scans():
 
 # ---------- MAIN ----------
 def main():
+    move_to_correct_directory()
     check_gcloud_auth()
     initialize_dev_terraform()
     scans = list_scans(IMPORT_PROJECT_ID, LOCATION)
