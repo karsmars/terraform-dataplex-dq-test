@@ -23,7 +23,7 @@ labels           = {}
     
     rules {
       column      = "Store"
-      description = "Store nbr should not be positive"
+      description = "Store nbr should not be negative"
       dimension   = "ACCURACY"
       ignore_null = false
       name        = "rule-1-store"
@@ -33,7 +33,7 @@ labels           = {}
         sql_statement = <<-EOT
         SELECT Store
       FROM $${data()}
-        WHERE Store > 0
+        WHERE Store < 0
         EOT
       }
     }
@@ -63,6 +63,22 @@ labels           = {}
       
       row_condition_expectation {
         sql_expression = "Holiday_Flag IN (0,1,2)"
+      }
+    }
+    rules {
+      column      = null
+      description = "Henry just loves this rule"
+      dimension   = "FRESHNESS"
+      ignore_null = false
+      name        = "henrys-favorite"
+      threshold   = 0
+      
+      sql_assertion {
+        sql_statement = <<-EOT
+        SELECT count(*) as ct
+      FROM $${data()}
+        HAVING ct = 0
+        EOT
       }
     }
   }
