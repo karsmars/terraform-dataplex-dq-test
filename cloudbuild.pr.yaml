@@ -13,6 +13,7 @@ steps:
         cd dataplex_infra
         terraform init -backend-config="backend-prod.tfbackend"
         terraform show
+        terraform plan
         terraform plan -no-color > plan.txt
 
   - name: 'alpine'
