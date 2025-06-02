@@ -11,7 +11,6 @@ steps:
       - -c
       - |
         cd dataplex_infra
-        pwd
         terraform init -backend-config=backend-prod.tfbackend
         terraform plan -no-color > plan.txt
         ls
@@ -24,7 +23,6 @@ steps:
       - -c
       - |
           cd dataplex_infra
-          pwd
           apk add --no-cache curl jq
           if [ -z "$_PR_NUMBER" ]; then
             echo "❌ ERROR: Missing \$_PR_NUMBER"
@@ -45,7 +43,6 @@ steps:
       - -c
       - |
         cd dataplex_infra
-        pwd
         terraform plan -detailed-exitcode
         code=$?
         if [ $code -eq 1 ]; then
