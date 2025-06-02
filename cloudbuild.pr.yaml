@@ -12,6 +12,7 @@ steps:
       - |
         cd dataplex_infra
         terraform init -backend-config="backend-prod.tfbackend"
+        terraform show
         terraform plan -no-color > plan.txt
 
   - name: 'alpine'
@@ -21,6 +22,7 @@ steps:
     args:
       - -c
       - |
+          pwd
           apk add --no-cache curl jq
           if [ -z "$_PR_NUMBER" ]; then
             echo "❌ ERROR: Missing \$_PR_NUMBER"
@@ -40,6 +42,7 @@ steps:
     args:
       - -c
       - |
+        pwd
         terraform plan -detailed-exitcode
         code=$?
         if [ $code -eq 1 ]; then
