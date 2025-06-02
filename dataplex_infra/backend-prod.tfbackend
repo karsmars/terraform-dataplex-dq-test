@@ -1,0 +1,2 @@
+bucket = "spencer-tf-remote-backend"
+prefix = "terraform/state"

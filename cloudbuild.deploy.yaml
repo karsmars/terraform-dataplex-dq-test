@@ -5,11 +5,11 @@ steps:
     args:
       - -c
       - |
-        
+        cd dataplex_infra
 
         if [ "$BRANCH_NAME" = "main" ]; then
           echo "🧪 Initializing Terraform"
-          terraform init
+          terraform init -backend-config=backend-prod.tfbackend
 
           echo "🔍 Validating Terraform configuration"
           terraform validate

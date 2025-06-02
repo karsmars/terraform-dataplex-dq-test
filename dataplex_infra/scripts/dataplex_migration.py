@@ -9,7 +9,8 @@ import shutil
 # We use the current time as a filename to avoid name conflicts
 START_TIME = datetime.datetime.now()
 
-PROJECT_ID = "ferrous-cipher-432403-j0"
+IMPORT_PROJECT_ID = "ferrous-cipher-prod"
+EXPORT_PROJECT_ID = "ferrous-cipher-432403-j0"
 LOCATION = "us-central1"
 TF_FILE = f"{START_TIME}_imported_scans.tf"
 IMPORT_SCRIPT = f"{START_TIME}_import_commands.sh"
@@ -49,7 +50,7 @@ RESOURCE_TYPES = {
     }
 }
 
-# ---------- STEP 1: GCLOUD AUTH ----------
+# ---------- STEP 1: GCLOUD AUTH / TERRAFORM INIT ----------
 def check_gcloud_auth():
     print("🔐 Checking gcloud auth...")
     result = subprocess.run(["gcloud", "auth", "list", "--format=json"], capture_output=True, text=True, check=True)
@@ -57,6 +58,21 @@ def check_gcloud_auth():
     if not accounts:
         raise RuntimeError("🚫 No authenticated gcloud accounts found.")
     print(f"✅ Authenticated as: {accounts[0]['account']}")
+    input("🔎 Press Enter to continue...")
+
+
+def initialize_dev_terraform():
+    print("Initializing Terraform dev instance locally...")
+
+    result = subprocess.run(["pwd"], capture_output=True, text=True, check=True)
+    print("PWD:", result)
+    
+    result = subprocess.run(["terraform", "init", "-backend-config=backend-dev.tfbackend", "-reconfigure"], capture_output=True, text=True, check=True)
+    
+    print("Terraform init result:", result)
+    # if not accounts:
+    #     raise RuntimeError("🚫 Terraform init failed.")
+    print(f"✅ Terraform init succeeded.")
     input("🔎 Press Enter to continue...")
 
 
@@ -427,7 +443,8 @@ def modularize_scans():
 # ---------- MAIN ----------
 def main():
     check_gcloud_auth()
-    scans = list_scans(PROJECT_ID, LOCATION)
+    initialize_dev_terraform()
+    scans = list_scans(IMPORT_PROJECT_ID, LOCATION)
     generate_import_files(scans)
     run_imports()
     clean_state_file()
