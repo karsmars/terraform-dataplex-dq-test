@@ -25,15 +25,3 @@ resource "google_storage_bucket" "default" {
 module "dataplex_test" {
   source = "./modules/dataplex_test"
 }
-
-module "dev_47c30c8a" {
-  source = "./modules/dev_47c30c8a"
-}
-
-module "samples" {
-  source = "./modules/samples"
-}
-
-module "thelook" {
-  source = "./modules/thelook"
-}
