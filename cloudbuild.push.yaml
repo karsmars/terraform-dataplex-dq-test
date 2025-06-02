@@ -7,7 +7,7 @@ steps:
       - |
         cd dataplex_infra
         echo "🧪 Initializing Terraform"
-        terraform init -backend-config="backend-prod.tfbackend"
+        terraform init -backend-config=backend-prod.tfbackend
 
         echo "🔍 Validating Terraform configuration"
         terraform validate
