@@ -1,0 +1,1 @@
+This folder should only be used once, when initially setting up the infrastructure. We declare the GCS buckets here for storing state (this could also be done manually through the console).
