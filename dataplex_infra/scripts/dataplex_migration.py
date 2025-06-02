@@ -51,6 +51,13 @@ RESOURCE_TYPES = {
 }
 
 # ---------- STEP 1: GCLOUD AUTH / TERRAFORM INIT ----------
+def move_to_correct_directory():
+    script_dir = Path(__file__).resolve().parent.parent
+    os.chdir(script_dir)
+
+    print("Changed working directory to script location (should be dataplex_infra, otherwise abort): ", Path.cwd())
+
+
 def check_gcloud_auth():
     print("🔐 Checking gcloud auth...")
     result = subprocess.run(["gcloud", "auth", "list", "--format=json"], capture_output=True, text=True, check=True)
@@ -70,6 +77,10 @@ def initialize_dev_terraform():
     #     raise RuntimeError("🚫 Terraform init failed.")
     print(f"✅ Terraform init succeeded.")
     input("🔎 Press Enter to continue...")
+
+
+def initializations():
+    move_to_correct_directory()
 
 
 # ---------- STEP 2: GENERATE IMPORT FILES ----------
@@ -444,6 +455,7 @@ def modularize_scans():
 
 # ---------- MAIN ----------
 def main():
+    move_to_correct_directory()
     check_gcloud_auth()
     initialize_dev_terraform()
     scans = list_scans(IMPORT_PROJECT_ID, LOCATION)
