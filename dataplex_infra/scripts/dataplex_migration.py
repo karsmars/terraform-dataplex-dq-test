@@ -81,6 +81,8 @@ def initialize_dev_terraform():
 
 def initializations():
     move_to_correct_directory()
+    check_gcloud_auth()
+    initialize_dev_terraform()
 
 
 # ---------- STEP 2: GENERATE IMPORT FILES ----------
@@ -455,9 +457,7 @@ def modularize_scans():
 
 # ---------- MAIN ----------
 def main():
-    move_to_correct_directory()
-    check_gcloud_auth()
-    initialize_dev_terraform()
+    initializations()
     scans = list_scans(IMPORT_PROJECT_ID, LOCATION)
     generate_import_files(scans)
     run_imports()
